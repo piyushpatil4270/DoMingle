@@ -1,18 +1,26 @@
 import express from "express";
 import { Socket, Server } from "socket.io";
 import http from "http";
+import { UserManager } from "./managers/UserManager";
 
 const app = express();
 const server = http.createServer(http);
 const io = new Server(server, {
   cors: {
-    origin: "*",
-  },
+    origin: "*"
+  }
 });
-const port = 7500;
 
-io.on("connection", () => {
+const port=7500
+
+const userManager= new UserManager()
+
+io.on("connection", (socket:Socket) => {
   console.log("New User Connected...");
+  userManager.addUser("RandomName",socket)
+  socket.on("disconnect",()=>{
+    userManager.removeUser(socket.id)
+  })
 });
 
-app.listen(port, () => console.log(`Server started at port ${port}`));
+server.listen(port, () => console.log(`Server started at port ${port}`));
