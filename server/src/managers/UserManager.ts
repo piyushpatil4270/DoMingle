@@ -19,7 +19,7 @@ export class UserManager{
         name,socket
        })
        this.queue.push(socket.id)
-       this.clearQueue()
+       this.clearQueue( )
        this.initHandlers(socket)
     }
     removeUser(socketId:string){
@@ -35,6 +35,7 @@ export class UserManager{
         if(!user1 || !user2) return
         this.roomManager.createRoom(user1,user2);
     }
+    // sends offer and takes response from both the users
     initHandlers(socket:Socket){
     socket.on("offer",({roomId,sdp}:{sdp:string,roomId:string})=>{
      this.roomManager.onOffer(roomId,sdp)
