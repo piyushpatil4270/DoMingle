@@ -13,8 +13,8 @@ export class RoomManager {
     this.rooms = new Map<string, Room>();
   }
   createRoom(user1: User, user2: User) {
-    const roomId = this.generate();
-    this.rooms.set(roomId.toString(), {
+    const roomId = this.generate().toString();
+    this.rooms.set(roomId, {
       user1,
       user2,
     });
@@ -24,6 +24,8 @@ export class RoomManager {
   }
   onOffer(roomId: string, sdp: string) {
     const user2 = this.rooms.get(roomId)?.user2;
+    console.log("roomId",roomId)
+    console.log("user2",roomId)
     user2?.socket.emit("offer", {
       sdp,
       roomId   

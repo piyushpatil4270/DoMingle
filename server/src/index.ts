@@ -17,6 +17,7 @@ const userManager= new UserManager()
 
 io.on("connection", (socket:Socket) => {
   console.log("New User Connected...");
+  // add the user to a queue
   userManager.addUser("RandomName",socket)
   socket.on("disconnect",()=>{
     userManager.removeUser(socket.id)
