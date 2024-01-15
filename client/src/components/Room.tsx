@@ -10,26 +10,38 @@ export const Room = () => {
   const [connected,setConnected]=useState(false)
   const [lobby,setLobby]=useState(true)
   const name = searchParams.get("name");
+  const [sendingPc, setSendingPc] = useState<null | RTCPeerConnection>(null);
+  const [receivingPc, setReceivingPc] = useState<null | RTCPeerConnection>(null);
+  const [remoteVideoTrack, setRemoteVideoTrack] = useState<MediaStreamTrack | null>(null);
+  const [remoteAudioTrack, setRemoteAudioTrack] = useState<MediaStreamTrack | null>(null);
+  const [remoteMediaStream, setRemoteMediaStream] = useState<MediaStream | null>(null);
   useEffect(() => {
     const socket = io(URL);
-    socket.on("send-offer",({roomId})=>{
-     alert("Send Offer Please...")
+    socket.on("send-offer",async({roomId})=>{
+     //alert("Send Offer Please...")
+     console.log("sending offer...")
      setLobby(false)
+     const pc= new RTCPeerConnection();
+     setSendingPc(pc)
+     const sdp=await pc.createOffer()
      socket.emit("offer",{
-        sdp:"",
+        sdp,
         roomId
      })
     })
-    socket.on("offer",({roomId,offer})=>{
-    alert("Send Answer Please...")
+    socket.on("offer",async({roomId,offer})=>{
+    //alert("Send Answer Please...")
      setLobby(false)
+     const pc= new RTCPeerConnection()
+     pc.setRemoteDescription({sdp:offer,type:"offer"})
+     const sdp=await pc.createAnswer()
     socket.emit("answer",{
         roomId,
         sdp:""
      })
     })
     socket.on("answer",({roomId,answer})=>{
-        alert("Connection Established...")
+       // alert("Connection Established...")
         setLobby(false)
         console.log("RoomId",roomId)
         console.log("answer",answer)
