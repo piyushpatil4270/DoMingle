@@ -54,10 +54,13 @@ export class UserManager {
   // sends offer and takes response from both the users
   initHandlers(socket: Socket) {
     socket.on("offer", ({ roomId, sdp }: { sdp: string; roomId: string }) => {
-      this.roomManager.onOffer(roomId, sdp);
+      this.roomManager.onOffer(roomId, sdp,socket.id);
     });
     socket.on("answer", ({ roomId, sdp }: { sdp: string; roomId: string }) => {
-      this.roomManager.onAnswer(roomId, sdp);
+      this.roomManager.onAnswer(roomId, sdp,socket.id);
     });
+    socket.on("add-ice-candidate",({candidate,roomId,type})=>{
+      this.roomManager.onIceCandidates(roomId,socket.id,candidate,type)
+    })
   }
 }
