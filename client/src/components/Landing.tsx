@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react"
-import { Link } from "react-router-dom"
 import { Room } from "./Room"
 export const Landing=()=>{
    const videoRef=useRef<HTMLVideoElement>(null)
@@ -20,7 +19,9 @@ export const Landing=()=>{
       if(!videoRef.current){
          return ;
       }
-      videoRef.current.srcObject= new MediaStream([videoTrack])     }
+      videoRef.current.srcObject= new MediaStream([videoTrack])
+      videoRef.current.play()
+   }
 
    useEffect(()=>{
       if(videoRef && videoRef.current){
@@ -30,8 +31,8 @@ export const Landing=()=>{
 
    if(!joined){
       return(
-         <div className="flex flex-col gap-5 justify-center items-center">
-      <video autoPlay style={{width:"250px",height:"250px"}} ref={videoRef}></video> 
+        <div className="flex flex-col gap-5 justify-center items-center">
+        <video autoPlay style={{width:"250px",height:"250px"}} ref={videoRef}></video> 
         <input value={name} onChange={(e)=>{setName(e.target.value)}} className="outline-none bg-slate-300 mt-8"/>
         <button onClick={()=>setJoined(true)} >Join</button>
     </div>
