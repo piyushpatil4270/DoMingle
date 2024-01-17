@@ -10,8 +10,8 @@ export const Room = ({
   localVideoTrack
 }:{
   name:string,
-  localAudioTrack:MediaStreamTrack,
-  localVideoTrack:MediaStreamTrack
+  localAudioTrack:MediaStreamTrack|null,
+  localVideoTrack:MediaStreamTrack|null
 }) => {
   const remoteVideoRef=useRef<HTMLVideoElement>()
   const [socket, setSocket] = useState<null | Socket>(null);
@@ -33,8 +33,13 @@ export const Room = ({
      const pc= new RTCPeerConnection();
      setSendingPc(pc)
      // adds audio and video track to the newly established connection
-     pc.addTrack(localAudioTrack)
-     pc.addTrack(localVideoTrack)
+     // pc.addTrack(localAudioTrack)
+    if(localVideoTrack){
+       pc.addTrack(localVideoTrack)
+    }
+    if(localAudioTrack){
+      pc.addTrack(localAudioTrack)
+   }
      pc.onicecandidate=async()=>{
       const sdp=await pc.createOffer()
         socket.emit("offer",{
@@ -60,11 +65,16 @@ export const Room = ({
      setReceivingPc(pc)
      pc.ontrack=(({track,type})=>{
       if(type==="audio"){
-        setRemoteAudioTrack(track)
+        //@ts-ignore
+        remoteVideoRef.current?.srcObject.addTrack(track)
       }
       else{
-        setRemoteVideoTrack(track)
+        //@ts-ignore
+        remoteVideoRef.current?.srcObject.addTrack(track)
       }
+      //@ts-ignore
+     remoteVideoRef.current.play()
+
      })
     socket.emit("answer",{
         roomId,
@@ -89,6 +99,9 @@ export const Room = ({
     </div>
   }
   
-  return<div>Hii {name}!!!</div>
+  return<div>Hii {name}!!!
+  <video autoPlay width={200} height={200} />
+  <video autoPlay width={400} height={200} ref={remoteVideoRef} />
+  </div>
   
 };

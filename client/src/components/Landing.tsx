@@ -33,7 +33,7 @@ export const Landing=()=>{
          <div className="flex flex-col gap-5 justify-center items-center">
       <video autoPlay style={{width:"250px",height:"250px"}} ref={videoRef}></video> 
         <input value={name} onChange={(e)=>{setName(e.target.value)}} className="outline-none bg-slate-300 mt-8"/>
-       <Link to={`/room/?name=${name}`}> <button >Join</button></Link>
+        <button onClick={()=>setJoined(true)} >Join</button>
     </div>
       )
    }
