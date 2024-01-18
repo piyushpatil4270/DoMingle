@@ -33,7 +33,7 @@ export const Landing=()=>{
    if(!joined){
       return(
         <div className="flex flex-col  justify-center items-center w-full h-dvh gradient-bg-welcome gap-5 ">
-        {/*<video autoPlay className="w-[25%] py-[25px]" ref={videoRef}></video>*/}
+       {/* <video autoPlay className="w-[25%] py-[25px]" ref={videoRef}></video>*/}
         <span className="text-[35px] text-transparent bg-clip-text bg-gradient-to-r from-slate-200 to-blue-200 ">Do-Mingle...</span>
         <span className="my-[15px] text-[25px] text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-purple-600">Connect , Chat and Discover</span>
         <div  className="outline-none bg-transparent border-[1px] border-slate-50 rounded-full text-white w-[25%] flex justify-between">
@@ -43,10 +43,9 @@ export const Landing=()=>{
          setJoined(true)
          }} />
         </div>
-        
-    </div>
+      </div>
       )
    }
 
-   return <Room name={name} localAudioTrack={localAudioTrack} localVideoTrack={localVideoTrack} />
+ return <Room name={name} localAudioTrack={localAudioTrack} localVideoTrack={localVideoTrack}  />
 }
