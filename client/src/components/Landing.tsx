@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { Room } from "./Room"
 export const Landing=()=>{
-   const videoRef=useRef<HTMLVideoElement>(null)
+   const videoRef=useRef<HTMLVideoElement|null>(null)
    const [name,setName]=useState("")
    const [joined,setJoined]=useState(false)
    const [localAudioTrack,setLocalAudioTrack]=useState<MediaStreamTrack | null>(null);
@@ -31,10 +31,13 @@ export const Landing=()=>{
 
    if(!joined){
       return(
-        <div className="flex flex-col gap-5 justify-center items-center">
-        <video autoPlay style={{width:"250px",height:"250px"}} ref={videoRef}></video> 
-        <input value={name} onChange={(e)=>{setName(e.target.value)}} className="outline-none bg-slate-300 mt-8"/>
-        <button onClick={()=>setJoined(true)} >Join</button>
+        <div className="flex flex-col  justify-center items-center w-full h-dvh gradient-bg-welcome gap-5 ">
+        {/*<video autoPlay className="w-[25%] py-[25px]" ref={videoRef}></video>*/}
+        <span className="text-[35px] text-transparent bg-clip-text bg-gradient-to-r from-pink-800 my-5 to-purple-600 ">Do-Mingle</span>
+        <div  className="outline-none bg-transparent border-[1px] border-slate-50 rounded-full text-white w-[25%]">
+        <input value={name} onChange={(e)=>{setName(e.target.value)}} className="outline-none bg-transparent mx-2"/>
+        </div>
+        
     </div>
       )
    }

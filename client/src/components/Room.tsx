@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {  useSearchParams } from "react-router-dom";
 import { Socket, io } from "socket.io-client";
-
+import Webcam from "react-webcam";
 const URL = "http://localhost:7500";
 
 export const Room = ({
@@ -15,8 +15,8 @@ export const Room = ({
   remoteVideoTrack:MediaStreamTrack|null,
   remoteAudioTrack:MediaStreamTrack|null
 }) => {
-  const remoteVideoRef=useRef<HTMLVideoElement|null>(null)
-  const localVideoRef = useRef<HTMLVideoElement|null>(null);
+  const remoteVideoRef=useRef<HTMLVideoElement>(null)
+  const localVideoRef =useRef<HTMLVideoElement>(null);
   const [socket, setSocket] = useState<null | Socket>(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [connected,setConnected]=useState(false)
@@ -26,6 +26,12 @@ export const Room = ({
   const [remoteVideoTrack, setRemoteVideoTrack] = useState<MediaStreamTrack | null>(null);
   const [remoteAudioTrack, setRemoteAudioTrack] = useState<MediaStreamTrack | null>(null);
   const [remoteMediaStream, setRemoteMediaStream] = useState<MediaStream | null>(null);
+  const videoConstraints = {
+    width: 360,
+    height: 360,
+    facingMode: "user"
+  };
+
 
   useEffect(() => {
     const socket = io(URL);
@@ -169,7 +175,7 @@ export const Room = ({
     if (localVideoRef.current) {
         if (localVideoTrack) {
             localVideoRef.current.srcObject = new MediaStream([localVideoTrack]);
-            localVideoRef.current.play();
+            localVideoRef?.current?.play();
         }
     }
 }, [localVideoRef])
@@ -180,10 +186,23 @@ export const Room = ({
     </div>
   }
  
-  return<div>Hii {name}!!!
-  
- <video autoPlay width={400} height={400} ref={localVideoRef} />
- <video autoPlay width={400} height={400} ref={remoteVideoRef} />
+  return<div style={{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>Hii {name}!!!
+  <Webcam
+              audio={false}
+              width={200}
+              height={200}
+              ref={localVideoRef}
+              screenshotFormat="image/jpeg"
+              videoConstraints={videoConstraints}
+            />        
+ <Webcam
+              audio={false}
+              width={200}
+              height={200}
+              ref={remoteVideoRef}
+              screenshotFormat="image/jpeg"
+              videoConstraints={videoConstraints}
+            />
         {lobby ? "Waiting to connect you to someone" : null}
   
   </div>
