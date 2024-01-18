@@ -181,8 +181,8 @@ export const Room = ({
 }, [localVideoRef])
 
   if(lobby){
-    return <div>
-    Waiting for someone to connect...
+    return <div className="w-full gradient-bg-welcome h-dvh text-white flex flex-col justify-center items-center">
+  <span className="text-[24px] text-white">Waiting For Someone To Connect...</span>
     </div>
   }
  
