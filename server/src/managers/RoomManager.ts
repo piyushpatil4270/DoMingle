@@ -27,14 +27,7 @@ export class RoomManager {
 
   }
   onOffer(roomId: string, sdp: string,senderSocketId:string) {
-    /*const user2 = this.rooms.get(roomId)?.user2;
-    console.log("roomId",roomId)
-    console.log("user2",roomId)
-    user2?.socket.emit("offer", {
-      sdp,
-      roomId   
-    });*/
-    const room= this.rooms.get(roomId)
+     const room= this.rooms.get(roomId)
     if(!room) return;
     const recievingUser=room.user1.socket.id==senderSocketId?room.user2:room.user1
     recievingUser?.socket.emit("offer",{
@@ -62,6 +55,13 @@ export class RoomManager {
   if(!room) return;
   const recievingUser=room.user1.socket.id===senderSocketId?room.user2:room.user1
   recievingUser.socket.emit("add-ice-candidate",({candidate,type}))
+  }
+  disconnectRoom(roomid:string){
+   console.log("Room disconnected")
+   const room=this.rooms.get(roomid)
+   room?.user1.socket.disconnect()
+   room?.user2.socket.disconnect()
+   console.log(room)
   }
 
   generate() {

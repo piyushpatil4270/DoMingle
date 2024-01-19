@@ -20,6 +20,7 @@ io.on("connection", (socket:Socket) => {
   // add the user to a queue
   userManager.addUser("RandomName",socket)
   socket.on("disconnect",()=>{
+    console.log("socket disconnected...")
     userManager.removeUser(socket.id)
   })
 });

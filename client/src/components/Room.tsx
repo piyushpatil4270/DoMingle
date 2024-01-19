@@ -15,10 +15,12 @@ export const Room = ({
   remoteVideoTrack: MediaStreamTrack | null;
   remoteAudioTrack: MediaStreamTrack | null;
 }) => {
+  
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const [socket, setSocket] = useState<null | Socket>(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [roomid,setroomId]=useState<string|null>(null)
   const [connected, setConnected] = useState(false);
   const [lobby, setLobby] = useState(true);
   const [sendingPc, setSendingPc] = useState<null | RTCPeerConnection>(null);
@@ -38,8 +40,9 @@ export const Room = ({
   };
 
   useEffect(() => {
-    const socket = io(URL);
+    const socket=io(URL)
     socket.on("send-offer", async ({ roomId }) => {
+      setroomId(roomId)
       //alert("Send Offer Please...")
       console.log("sending offer...");
       setLobby(false);
@@ -169,8 +172,15 @@ export const Room = ({
         });
       }
     });
+
+
     setSocket(socket);
   }, [name]);
+  const disconnect=()=>{
+    const socket=io(URL)
+    setLobby(true)
+    socket.emit("disconnectRoom",{roomid})
+  }
   useEffect(() => {
     if (localVideoRef.current) {
       if (localVideoTrack) {
@@ -190,7 +200,7 @@ export const Room = ({
     <div className="w-full h-dvh gradient-bg-welcome flex">
       <div className="flex-1 flex flex-col gap-5 h-full justify-center items-start"> 
         <Webcam
-          audio={true}
+          audio={false}
           width={250}
           height={100}
           ref={localVideoRef}
@@ -200,7 +210,7 @@ export const Room = ({
           
         />
         <Webcam
-          audio={true}
+          audio={false}
           width={250}
           height={100}
           ref={remoteVideoRef}
@@ -208,10 +218,14 @@ export const Room = ({
           videoConstraints={videoConstraints}
           className="m-5"
         />
+        
+       
         </div>
       
       <div className="flex-1 justify-center">
-       
+      <button className="text-white m-5 py-1 px-3 bg-red-600 rounded-sm" 
+      onClick={disconnect}
+      >Hang Up</button>
       </div>
 
       {lobby ? "Waiting to connect you to someone" : null}

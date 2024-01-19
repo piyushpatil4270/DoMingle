@@ -62,5 +62,8 @@ export class UserManager {
     socket.on("add-ice-candidate",({candidate,roomId,type})=>{
       this.roomManager.onIceCandidates(roomId,socket.id,candidate,type)
     })
+    socket.on("disconnectRoom",({roomid})=>{
+      this.roomManager.disconnectRoom(roomid)
+    })
   }
 }
